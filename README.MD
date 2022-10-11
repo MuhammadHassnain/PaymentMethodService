@@ -9,6 +9,7 @@ A spring boot project for creating Payment Method and Payment Plan
 - Get All Payment Methods
 - Get Specific Payment Method
 - Filter Payment Method on the basis of name
+- Filter Payment Method on the basis of payment plan id.
 
 ## Backend
 ### Technology:
