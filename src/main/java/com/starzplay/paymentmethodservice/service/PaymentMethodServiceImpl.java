@@ -2,9 +2,11 @@ package com.starzplay.paymentmethodservice.service;
 
 
 import com.starzplay.paymentmethodservice.entity.PaymentMethod;
+import com.starzplay.paymentmethodservice.exception.ResourceNotFoundException;
 import com.starzplay.paymentmethodservice.repository.PaymentMethodRepository;
 import com.starzplay.paymentmethodservice.repository.PaymentPlanRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,14 +25,14 @@ public class PaymentMethodServiceImpl implements PaymentMethodService {
 
     @Override
     public PaymentMethod updatePaymentMethod(Long id, PaymentMethod paymentMethod) {
-        PaymentMethod existingPayMethod = paymentMethodRepository.findById(id).orElseThrow(RuntimeException::new);
+        PaymentMethod existingPayMethod = paymentMethodRepository.findById(id).orElseThrow(()->new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Payment Method " + id + " Not Found"));
         paymentMethod.setPaymentMethodId(id);
         return paymentMethodRepository.save(paymentMethod);
     }
 
     @Override
     public PaymentMethod getPaymentMethod(Long id) {
-        return paymentMethodRepository.findById(id).orElseThrow(RuntimeException::new);
+        return paymentMethodRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Payment Method " + id + " Not Found"));
     }
 
     @Override
@@ -41,12 +43,12 @@ public class PaymentMethodServiceImpl implements PaymentMethodService {
 
 
     @Override
-    public void deletePaymentMethod(Long paymentPlanId){
-        PaymentMethod paymentMethod = paymentMethodRepository.findById(paymentPlanId)
-                .orElseThrow(RuntimeException::new);
+    public void deletePaymentMethod(Long paymentMethodId){
+        PaymentMethod paymentMethod = paymentMethodRepository.findById(paymentMethodId)
+                .orElseThrow(()->new ResourceNotFoundException("Payment Method " + paymentMethodId + " Not Found"));
         paymentMethod.setPaymentPlans(new ArrayList<>());
         paymentMethodRepository.save(paymentMethod);
-        paymentMethodRepository.deleteById(paymentPlanId);
+        paymentMethodRepository.deleteById(paymentMethodId);
     }
 
 
