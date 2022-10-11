@@ -64,5 +64,13 @@ public class PaymentController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping( params = {"name"})
+    public ResponseEntity<List<PaymentMethodDTO>> getPaymentMethodByName(@RequestParam String name){
+
+        return ResponseEntity.ok(
+                paymentMethodService.getPaymentMethodsByName(name).stream().map(paymentMethod -> objectMapper.convertValue(paymentMethod, PaymentMethodDTO.class))
+                        .collect(Collectors.toList())
+        );
+    }
 
 }

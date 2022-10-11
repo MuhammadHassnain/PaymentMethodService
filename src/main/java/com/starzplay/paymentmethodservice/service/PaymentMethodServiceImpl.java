@@ -52,4 +52,9 @@ public class PaymentMethodServiceImpl implements PaymentMethodService {
     }
 
 
+    @Override
+    public List<PaymentMethod> getPaymentMethodsByName(String name) {
+
+        return paymentMethodRepository.findAllByName(name);
+    }
 }
