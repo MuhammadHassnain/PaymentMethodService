@@ -14,4 +14,6 @@ public interface PaymentMethodService {
     void deletePaymentMethod(Long paymentMethodId);
 
     List<PaymentMethod> getPaymentMethodsByName(String name);
+
+    List<PaymentMethod> getPaymentMethodByPaymentPlanId(Long paymentPlanId);
 }

@@ -72,5 +72,13 @@ public class PaymentController {
                         .collect(Collectors.toList())
         );
     }
+    @GetMapping( params = {"id"})
+    public ResponseEntity<List<PaymentMethodDTO>> getPaymentMethodByName(@RequestParam Long id){
+
+        return ResponseEntity.ok(
+                paymentMethodService.getPaymentMethodByPaymentPlanId(id).stream().map(paymentMethod -> objectMapper.convertValue(paymentMethod, PaymentMethodDTO.class))
+                        .collect(Collectors.toList())
+        );
+    }
 
 }

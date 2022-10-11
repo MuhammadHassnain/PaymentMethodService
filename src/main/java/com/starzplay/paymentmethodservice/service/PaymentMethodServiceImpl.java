@@ -11,13 +11,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
 @AllArgsConstructor
 public class PaymentMethodServiceImpl implements PaymentMethodService {
     private final PaymentMethodRepository paymentMethodRepository;
-
+    private final PaymentPlanRepository paymentPlanRepository;
     @Override
     public PaymentMethod createPaymentMethod(PaymentMethod paymentMethod) {
         return paymentMethodRepository.save(paymentMethod);
@@ -26,7 +27,10 @@ public class PaymentMethodServiceImpl implements PaymentMethodService {
     @Override
     public PaymentMethod updatePaymentMethod(Long id, PaymentMethod paymentMethod) {
         PaymentMethod existingPayMethod = paymentMethodRepository.findById(id).orElseThrow(()->new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Payment Method " + id + " Not Found"));
-        paymentMethod.setPaymentMethodId(id);
+        if(paymentMethod.getPaymentPlans()!=null && paymentMethod.getPaymentPlans().size()>0){
+            paymentMethod.setPaymentPlans(paymentPlanRepository.saveAll(paymentMethod.getPaymentPlans()));
+        }
+        paymentMethod.setPaymentMethodId(existingPayMethod.getPaymentMethodId());
         return paymentMethodRepository.save(paymentMethod);
     }
 
@@ -56,5 +60,15 @@ public class PaymentMethodServiceImpl implements PaymentMethodService {
     public List<PaymentMethod> getPaymentMethodsByName(String name) {
 
         return paymentMethodRepository.findAllByName(name);
+    }
+
+    @Override
+    public  List<PaymentMethod> getPaymentMethodByPaymentPlanId(Long paymentPlanId){
+        return paymentMethodRepository.findAll().stream()
+                .filter(paymentMethod -> paymentMethod
+                        .getPaymentPlans()
+                        .stream()
+                            .anyMatch(paymentPlan -> paymentPlan.getPaymentPlanId().equals(paymentPlanId)))
+                .collect(Collectors.toList());
     }
 }
