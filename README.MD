@@ -26,6 +26,8 @@ A spring boot project for creating Payment Method and Payment Plan
 /api/v1.0/configuration/payment-methods/{id}   | POST | Fetch Payment Method by Payment Method id.  
 /api/v1.0/configuration/payment-methods/{id}  | PUT | Update Payment Method                       
 /api/v1.0/configuration/payment-methods/{id}   | GET | Delete a payment method
+/api/v1.0/configuration/payment-method?name=Credit+Card   | GET | Search by Name
+/api/v1.0/configuration/payment-method?id={paymentPlanId}   | GET | Search by Payment Plan Id.
 
 
 ### How to Run the application
